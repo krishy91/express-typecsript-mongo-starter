@@ -2,9 +2,9 @@ import * as path from 'path';
 import * as express from 'express';
 import * as logger from 'morgan';
 import * as bodyParser from 'body-parser';
+import * as config from 'config';
 import mongoose = require("mongoose");
-import {User} from "./models/user";
-import {IUser} from "./interfaces/user";
+import UserRouter from './routes/UserRouter';
 
 // Creates and configures an ExpressJS web server.
 class App {
@@ -26,16 +26,17 @@ class App {
     mongoose.Promise = global.Promise;
     //connect to mongoose
 
-    let connection = "mongodb://localhost:27017/test";
+    let connection = config.get("database.connection");
 
     mongoose.connect(connection);
 
-   mongoose.connection.on("connected", () => {
-     console.log("Connected to database " + connection);
-   });
-   mongoose.connection.on("error", (err) => {
-     console.log("Database error " + err);
-   });
+    mongoose.connection.on("connected", () => {
+      console.log("Connected to database " + connection);
+    });
+
+    mongoose.connection.on("error", (err) => {
+      console.log("Database error " + err);
+    });
   }
 
   // Configure Express middleware.
@@ -47,27 +48,15 @@ class App {
 
   // Configure API endpoints.
   private routes(): void {
-    /* This is just to get up and running, and to make sure what we've got is
-     * working so far. This function will change when we start to add more
-     * API endpoints */
     let router = express.Router();
     // placeholder route handler
     router.get('/', (req, res, next) => {
-      let someUser = new User({
-      email: "foo@bar.com",
-      firstName: "Brian",
-      lastName: "Love"
-    });
-    someUser.save().then(user => {
-      console.log({success: true, message: "User added to db."});
-    }).catch(err => {
-      console.log({success: false, message: "User not added to db."});
-    });
-    res.json({
-        message: 'Hello World!'
-      });
+      res.json({
+          message: 'Hello World!'
+        });
     });
     this.express.use('/', router);
+    this.express.use('/user', UserRouter);
   }
 
 }
