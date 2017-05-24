@@ -26,7 +26,7 @@ class App {
     mongoose.Promise = global.Promise;
     //connect to mongoose
 
-    let connection = "mongodb://root:root@ds147821.mlab.com:47821/skycheck";
+    let connection = "mongodb://localhost:27017/test";
 
     mongoose.connect(connection);
 
