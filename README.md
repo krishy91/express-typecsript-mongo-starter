@@ -3,7 +3,7 @@
 A starter project which uses express, typescript and mongo db
 
 * Uses latest available version of Typescript.
-* Mongoose for OOP operations on MongoDB
+* Mongoose for schema-based DB operations
 * Gulp is used as the task runner
 
 ## Installation
